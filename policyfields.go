@@ -1,7 +1,6 @@
 package aerospikeurl
 
 import (
-	"encoding/json"
 	"net/url"
 	"strconv"
 	"strings"
@@ -26,11 +25,9 @@ func parseClientPolicyQuery(connURL *url.URL, client *AerospikeClientFactory) {
 	parseOpeningConnectionThreshold(connURL, client.policy)
 	parseFailIfNotConnected(connURL, client.policy)
 	parseTendInterval(connURL, client.policy)
-	parseIpMap(connURL, client.policy)
 	parseUseServicesAlternate(connURL, client.policy)
 	parseRackAware(connURL, client.policy)
 	parseRackId(connURL, client.policy)
-	parseRackIds(connURL, client.policy)
 	parseIgnoreOtherSubnetAliases(connURL, client.policy)
 	parseSeedOnlyCluster(connURL, client.policy)
 }
@@ -167,17 +164,6 @@ func parseTendInterval(connURL *url.URL, policy *aerospike.ClientPolicy) {
 	}
 }
 
-func parseIpMap(connURL *url.URL, policy *aerospike.ClientPolicy) {
-	ipMapJsonStr := connURL.Query().Get("ip_map")
-
-	if ipMapJsonStr != "" {
-		var ipMap map[string]string
-		json.Unmarshal([]byte(ipMapJsonStr), &ipMap)
-
-		policy.IpMap = ipMap
-	}
-}
-
 func parseUseServicesAlternate(connURL *url.URL, policy *aerospike.ClientPolicy) {
 	useServicesAlternateStr := strings.TrimSpace(connURL.Query().Get("use_services_alternate"))
 
@@ -203,20 +189,6 @@ func parseRackId(connURL *url.URL, policy *aerospike.ClientPolicy) {
 		rackId, _ := strconv.Atoi(rackIdStr)
 		policy.RackId = rackId
 	}
-}
-
-func parseRackIds(connURL *url.URL, policy *aerospike.ClientPolicy) {
-	rackIdsParam := connURL.Query().Get("rack_ids")
-	rackIdStrs := strings.Split(rackIdsParam, ",")
-
-	var rackIds []int
-
-	for _, idStr := range rackIdStrs {
-		id, _ := strconv.Atoi(idStr)
-		rackIds = append(rackIds, id)
-	}
-
-	policy.RackIds = rackIds
 }
 
 func parseIgnoreOtherSubnetAliases(connURL *url.URL, policy *aerospike.ClientPolicy) {
