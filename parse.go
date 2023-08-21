@@ -18,19 +18,23 @@ func Parse(connStr string) (*AerospikeClientFactory, error) {
 		return nil, err
 	}
 
-	client := &AerospikeClientFactory{}
+	clientFactory := &AerospikeClientFactory{}
 
 	port, _ := strconv.Atoi(connURL.Port())
 
-	client.SetHostname(connURL.Hostname())
-	client.SetPort(port)
+	clientFactory.SetHostname(connURL.Hostname())
+	clientFactory.SetPort(port)
 
-	parseClientPolicyQuery(connURL, client)
+	parseClientPolicyQuery(connURL, clientFactory)
 
-	return nil, nil
+	return clientFactory, nil
 }
 
 func validateSchemeAndHost(connURL *url.URL) error {
+	if connURL == nil {
+		return errors.New("connURL must be initialized with connection string")
+	}
+
 	if connURL.Scheme != "aerospike" {
 		return fmt.Errorf("invalid scheme: %v://, expected: aerospike://", connURL.Scheme)
 	}
