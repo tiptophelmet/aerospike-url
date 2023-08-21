@@ -20,7 +20,7 @@ func TestInitEmptyConnStr(t *testing.T) {
 }
 
 func TestInitEmptyScheme(t *testing.T) {
-	connStr := "123.231.123.231:8000"
+	connStr := "127.0.0.1:3000"
 	aeroURL, err := Init(connStr)
 
 	var urlErr *url.Error
@@ -34,7 +34,7 @@ func TestInitEmptyScheme(t *testing.T) {
 }
 
 func TestInitEmptySchemeWithForwardSlashes(t *testing.T) {
-	connStr := "//123.231.123.231:8000"
+	connStr := "//127.0.0.1:3000"
 	aeroURL, err := Init(connStr)
 
 	if !errors.Is(err, ErrInvalidScheme) {
@@ -47,7 +47,7 @@ func TestInitEmptySchemeWithForwardSlashes(t *testing.T) {
 }
 
 func TestInitInvalidScheme(t *testing.T) {
-	connStr := "https://123.231.123.231:8000"
+	connStr := "https://127.0.0.1:3000"
 	aeroURL, err := Init(connStr)
 
 	if !errors.Is(err, ErrInvalidScheme) {
@@ -60,7 +60,7 @@ func TestInitInvalidScheme(t *testing.T) {
 }
 
 func TestInitEmptyHostname(t *testing.T) {
-	connStr := "aerospike://:8000"
+	connStr := "aerospike://:3000"
 	aeroURL, err := Init(connStr)
 
 	if !errors.Is(err, ErrEmptyHostname) {
@@ -73,7 +73,7 @@ func TestInitEmptyHostname(t *testing.T) {
 }
 
 func TestInitEmptyPort(t *testing.T) {
-	connStr := "aerospike://123.231.123.231:"
+	connStr := "aerospike://127.0.0.1:"
 	aeroURL, err := Init(connStr)
 
 	if !errors.Is(err, ErrEmptyPort) {
@@ -86,7 +86,7 @@ func TestInitEmptyPort(t *testing.T) {
 }
 
 func TestInit(t *testing.T) {
-	connStr := "aerospike://123.231.123.231:8000"
+	connStr := "aerospike://127.0.0.1:3000"
 	aeroURL, err := Init(connStr)
 
 	if err != nil {
@@ -99,7 +99,7 @@ func TestInit(t *testing.T) {
 }
 
 func TestGetURL(t *testing.T) {
-	connStr := "aerospike://123.231.123.231:8000"
+	connStr := "aerospike://127.0.0.1:3000"
 	aeroURL, err := Init(connStr)
 
 	if err != nil {
