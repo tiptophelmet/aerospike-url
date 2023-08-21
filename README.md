@@ -60,7 +60,17 @@ func main() {
 
 # ⚠️ Limitations
 
-The following client policy fields are not supported as URL query parameters & can be set by directly modifying ClientPolicy (to get it: `clientFactory.GetClientPolicy()`)
+1. The following client policy fields are not supported as URL query parameters & can be set by directly modifying ClientPolicy (to get it: `clientFactory.GetClientPolicy()`)
 - `aerospike.ClientPolicy.IpMap`
 - `aerospike.ClientPolicy.RackIds`
 - `aerospike.ClientPolicy.TlsConfig`
+
+---
+
+2. `AerospikeClientFactory.GetClient()` uses the following methods for client generation:
+- `aerospike.NewClient(hostname string, port int) (*Client, Error)`
+- `aerospike.NewClientWithPolicy(policy *ClientPolicy, hostname string, port int) (*Client, Error)`
+
+
+`AerospikeClientFactory` does NOT support the following method as `hosts` cannot be specified in aerospike URL:
+- `aerospike.NewClientWithPolicyAndHost(policy *ClientPolicy, hosts ...*Host) (*Client, Error)`
