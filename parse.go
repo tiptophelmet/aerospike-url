@@ -21,19 +21,6 @@ func Parse(connStr string) (*AerospikeClientFactory, error) {
 	return generateClientFactory(connURL), nil
 }
 
-func generateClientFactory(connURL *url.URL) *AerospikeClientFactory {
-	clientFactory := &AerospikeClientFactory{}
-
-	port, _ := strconv.Atoi(connURL.Port())
-
-	clientFactory.SetHostname(connURL.Hostname())
-	clientFactory.SetPort(port)
-
-	parseClientPolicyQuery(connURL, clientFactory)
-
-	return clientFactory
-}
-
 func validateSchemeAndHost(connURL *url.URL) error {
 	if connURL == nil {
 		return errors.New("connURL must be initialized with connection string")
@@ -52,4 +39,17 @@ func validateSchemeAndHost(connURL *url.URL) error {
 	}
 
 	return nil
+}
+
+func generateClientFactory(connURL *url.URL) *AerospikeClientFactory {
+	clientFactory := &AerospikeClientFactory{}
+
+	port, _ := strconv.Atoi(connURL.Port())
+
+	clientFactory.SetHostname(connURL.Hostname())
+	clientFactory.SetPort(port)
+
+	parseClientPolicyFields(connURL, clientFactory)
+
+	return clientFactory
 }
