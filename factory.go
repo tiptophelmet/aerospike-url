@@ -16,12 +16,8 @@ func (cf *AerospikeClientFactory) SetPort(port int) {
 	cf.port = port
 }
 
-func (cf *AerospikeClientFactory) GetClientPolicy() *aerospike.ClientPolicy {
-	if cf.policy == nil {
-		cf.policy = aerospike.NewClientPolicy()
-	}
-
-	return cf.policy
+func (cf *AerospikeClientFactory) SetClientPolicy(policy *aerospike.ClientPolicy) {
+	cf.policy = policy
 }
 
 func (cf *AerospikeClientFactory) GetClient() (*aerospike.Client, aerospike.Error) {

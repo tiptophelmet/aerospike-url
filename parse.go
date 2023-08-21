@@ -49,7 +49,7 @@ func generateClientFactory(connURL *url.URL) *AerospikeClientFactory {
 	clientFactory.SetHostname(connURL.Hostname())
 	clientFactory.SetPort(port)
 
-	parseClientPolicyFields(connURL, clientFactory)
+	parseClientPolicy(connURL, clientFactory)
 
 	return clientFactory
 }
