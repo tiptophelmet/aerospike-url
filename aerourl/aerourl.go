@@ -1,11 +1,15 @@
 package aerourl
 
 import (
-	"errors"
 	"net/url"
+	"strings"
 )
 
 func Init(connStr string) (*AerospikeURL, error) {
+	if strings.TrimSpace(connStr) == "" {
+		return nil, ErrEmptyConnStr
+	}
+
 	connURL, err := url.Parse(connStr)
 	if err != nil {
 		return nil, err
@@ -48,10 +52,3 @@ func (aeroURL *AerospikeURL) validateSchemeAndHost() error {
 func (aeroURL *AerospikeURL) GetURL() *url.URL {
 	return aeroURL.url
 }
-
-var (
-	ErrNilURL        = errors.New("aerospike URL must be initialized with connection string")
-	ErrInvalidScheme = errors.New("invalid url scheme, want: aerospike://")
-	ErrEmptyHostname = errors.New("aerospike hostname cannot be empty")
-	ErrEmptyPort     = errors.New("aerospike port cannot be empty")
-)
