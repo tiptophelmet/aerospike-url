@@ -10,7 +10,7 @@ import (
 	"github.com/tiptophelmet/aerospike-url/factory"
 )
 
-func Parse(aeroURL *aerourl.AerospikeURL, client *factory.AerospikeClientFactory) {
+func Parse(aeroURL *aerourl.AerospikeURL, clientFactory *factory.AerospikeClientFactory) {
 	if len(aeroURL.GetURL().Query()) == 0 {
 		return
 	}
@@ -39,16 +39,12 @@ func Parse(aeroURL *aerourl.AerospikeURL, client *factory.AerospikeClientFactory
 	parser.IgnoreOtherSubnetAliases()
 	parser.SeedOnlyCluster()
 
-	client.SetClientPolicy(parser.GetClientPolicy())
+	clientFactory.SetClientPolicy(parser.GetClientPolicy())
 }
 
 type ClientPolicyParser struct {
 	aeroURL *aerourl.AerospikeURL
 	policy  *aerospike.ClientPolicy
-}
-
-func (parser *ClientPolicyParser) GetClientPolicy() *aerospike.ClientPolicy {
-	return parser.policy
 }
 
 func (parser *ClientPolicyParser) AuthMode() {
@@ -226,4 +222,8 @@ func (parser *ClientPolicyParser) SeedOnlyCluster() {
 		seedOnlyCluster, _ := strconv.ParseBool(seedOnlyClusterStr)
 		parser.policy.SeedOnlyCluster = seedOnlyCluster
 	}
+}
+
+func (parser *ClientPolicyParser) GetClientPolicy() *aerospike.ClientPolicy {
+	return parser.policy
 }
