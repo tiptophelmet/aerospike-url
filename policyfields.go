@@ -9,7 +9,7 @@ import (
 	"github.com/aerospike/aerospike-client-go/v6"
 )
 
-func parseClientPolicyQuery(connURL *url.URL, client *AerospikeClientFactory) {
+func parseClientPolicyFields(connURL *url.URL, client *AerospikeClientFactory) {
 	parseAuthMode(connURL, client.policy)
 	parseUser(connURL, client.policy)
 	parsePassword(connURL, client.policy)
