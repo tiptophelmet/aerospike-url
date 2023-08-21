@@ -18,7 +18,7 @@ import (
 
 // Use aerospikeurl to build Aerospike client from URL
 func getClientFromURL(url string) {
-    clientFactory, err := aerospikeurl.Parse(connStr)
+    clientFactory, err := aerospikeurl.Parse(url)
     if err != nil {
         panic(err)
     }
