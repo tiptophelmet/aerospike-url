@@ -18,6 +18,10 @@ func Parse(connStr string) (*AerospikeClientFactory, error) {
 		return nil, err
 	}
 
+	return generateClientFactory(connURL), nil
+}
+
+func generateClientFactory(connURL *url.URL) *AerospikeClientFactory {
 	clientFactory := &AerospikeClientFactory{}
 
 	port, _ := strconv.Atoi(connURL.Port())
@@ -27,7 +31,7 @@ func Parse(connStr string) (*AerospikeClientFactory, error) {
 
 	parseClientPolicyQuery(connURL, clientFactory)
 
-	return clientFactory, nil
+	return clientFactory
 }
 
 func validateSchemeAndHost(connURL *url.URL) error {
