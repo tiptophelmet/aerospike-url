@@ -2,54 +2,35 @@ package aerospikeurl
 
 import (
 	"errors"
-	"fmt"
-	"net/url"
 	"strconv"
+
+	"github.com/tiptophelmet/aerospike-url/aerourl"
+	"github.com/tiptophelmet/aerospike-url/clientpolicy"
+	"github.com/tiptophelmet/aerospike-url/factory"
 )
 
-func Parse(connStr string) (*AerospikeClientFactory, error) {
-	connURL, err := url.Parse(connStr)
+func Parse(connStr string) (*factory.AerospikeClientFactory, error) {
+	aeroURL, err := aerourl.Init(connStr)
 	if err != nil {
 		return nil, err
 	}
 
-	err = validateSchemeAndHost(connURL)
-	if err != nil {
-		return nil, err
-	}
-
-	return generateClientFactory(connURL), nil
+	return generateClientFactory(aeroURL)
 }
 
-func validateSchemeAndHost(connURL *url.URL) error {
-	if connURL == nil {
-		return errors.New("connURL must be initialized with connection string")
+func generateClientFactory(aeroURL *aerourl.AerospikeURL) (*factory.AerospikeClientFactory, error) {
+	if aeroURL == nil {
+		return nil, errors.New("connURL must be initialized with connection string")
 	}
 
-	if connURL.Scheme != "aerospike" {
-		return fmt.Errorf("invalid scheme: %v://, expected: aerospike://", connURL.Scheme)
-	}
+	clientFactory := &factory.AerospikeClientFactory{}
+	url := aeroURL.GetURL()
+	port, _ := strconv.Atoi(url.Port())
 
-	if connURL.Hostname() == "" {
-		return errors.New("aerospike hostname cannot be empty")
-	}
-
-	if connURL.Port() == "" {
-		return errors.New("aerospike port cannot be empty")
-	}
-
-	return nil
-}
-
-func generateClientFactory(connURL *url.URL) *AerospikeClientFactory {
-	clientFactory := &AerospikeClientFactory{}
-
-	port, _ := strconv.Atoi(connURL.Port())
-
-	clientFactory.SetHostname(connURL.Hostname())
+	clientFactory.SetHostname(url.Hostname())
 	clientFactory.SetPort(port)
 
-	parseClientPolicy(connURL, clientFactory)
+	clientpolicy.Parse(aeroURL, clientFactory)
 
-	return clientFactory
+	return clientFactory, nil
 }

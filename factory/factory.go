@@ -1,4 +1,4 @@
-package aerospikeurl
+package factory
 
 import "github.com/aerospike/aerospike-client-go/v6"
 

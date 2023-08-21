@@ -1,21 +1,22 @@
-package aerospikeurl
+package clientpolicy
 
 import (
-	"net/url"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/aerospike/aerospike-client-go/v6"
+	"github.com/tiptophelmet/aerospike-url/aerourl"
+	"github.com/tiptophelmet/aerospike-url/factory"
 )
 
-func parseClientPolicy(connURL *url.URL, client *AerospikeClientFactory) {
-	if len(connURL.Query()) == 0 {
+func Parse(aeroURL *aerourl.AerospikeURL, client *factory.AerospikeClientFactory) {
+	if len(aeroURL.GetURL().Query()) == 0 {
 		return
 	}
-	
+
 	policy := aerospike.NewClientPolicy()
-	parser := &ClientPolicyParser{connURL, policy}
+	parser := &ClientPolicyParser{aeroURL, policy}
 
 	parser.AuthMode()
 	parser.User()
@@ -42,7 +43,7 @@ func parseClientPolicy(connURL *url.URL, client *AerospikeClientFactory) {
 }
 
 type ClientPolicyParser struct {
-	connURL *url.URL
+	aeroURL *aerourl.AerospikeURL
 	policy  *aerospike.ClientPolicy
 }
 
@@ -51,7 +52,7 @@ func (parser *ClientPolicyParser) GetClientPolicy() *aerospike.ClientPolicy {
 }
 
 func (parser *ClientPolicyParser) AuthMode() {
-	authMode := parser.connURL.Query().Get("auth_mode")
+	authMode := parser.aeroURL.GetURL().Query().Get("auth_mode")
 
 	if authMode == "auth_mode_internal" {
 		parser.policy.AuthMode = aerospike.AuthModeInternal
@@ -63,28 +64,28 @@ func (parser *ClientPolicyParser) AuthMode() {
 }
 
 func (parser *ClientPolicyParser) User() {
-	user := parser.connURL.User.Username()
+	user := parser.aeroURL.GetURL().User.Username()
 	if user != "" {
 		parser.policy.User = user
 	}
 }
 
 func (parser *ClientPolicyParser) Password() {
-	password, isPasswordSet := parser.connURL.User.Password()
+	password, isPasswordSet := parser.aeroURL.GetURL().User.Password()
 	if isPasswordSet {
 		parser.policy.Password = password
 	}
 }
 
 func (parser *ClientPolicyParser) ClusterName() {
-	clusterName := parser.connURL.Query().Get("cluster_name")
+	clusterName := parser.aeroURL.GetURL().Query().Get("cluster_name")
 	if clusterName != "" {
 		parser.policy.ClusterName = clusterName
 	}
 }
 
 func (parser *ClientPolicyParser) Timeout() {
-	timeoutStr := parser.connURL.Query().Get("timeout")
+	timeoutStr := parser.aeroURL.GetURL().Query().Get("timeout")
 
 	if timeoutStr != "" {
 		timeout, _ := time.ParseDuration(timeoutStr)
@@ -93,7 +94,7 @@ func (parser *ClientPolicyParser) Timeout() {
 }
 
 func (parser *ClientPolicyParser) IdleTimeout() {
-	idleTimeoutStr := parser.connURL.Query().Get("idle_timeout")
+	idleTimeoutStr := parser.aeroURL.GetURL().Query().Get("idle_timeout")
 
 	if idleTimeoutStr != "" {
 		idleTimeout, _ := time.ParseDuration(idleTimeoutStr)
@@ -102,7 +103,7 @@ func (parser *ClientPolicyParser) IdleTimeout() {
 }
 
 func (parser *ClientPolicyParser) LoginTimeout() {
-	loginTimeoutStr := parser.connURL.Query().Get("login_timeout")
+	loginTimeoutStr := parser.aeroURL.GetURL().Query().Get("login_timeout")
 
 	if loginTimeoutStr != "" {
 		loginTimeout, _ := time.ParseDuration(loginTimeoutStr)
@@ -111,7 +112,7 @@ func (parser *ClientPolicyParser) LoginTimeout() {
 }
 
 func (parser *ClientPolicyParser) ConnectionQueueSize() {
-	connQueueSizeStr := strings.TrimSpace(parser.connURL.Query().Get("connection_queue_size"))
+	connQueueSizeStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("connection_queue_size"))
 
 	if connQueueSizeStr != "" {
 		connQueueSize, _ := strconv.Atoi(connQueueSizeStr)
@@ -120,7 +121,7 @@ func (parser *ClientPolicyParser) ConnectionQueueSize() {
 }
 
 func (parser *ClientPolicyParser) MinConnectionsPerNode() {
-	minConnsPerNodeStr := strings.TrimSpace(parser.connURL.Query().Get("min_connections_per_node"))
+	minConnsPerNodeStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("min_connections_per_node"))
 
 	if minConnsPerNodeStr != "" {
 		minConnsPerNode, _ := strconv.Atoi(minConnsPerNodeStr)
@@ -129,7 +130,7 @@ func (parser *ClientPolicyParser) MinConnectionsPerNode() {
 }
 
 func (parser *ClientPolicyParser) MaxErrorRate() {
-	maxErrorRateStr := strings.TrimSpace(parser.connURL.Query().Get("max_error_rate"))
+	maxErrorRateStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("max_error_rate"))
 
 	if maxErrorRateStr != "" {
 		maxErrorRate, _ := strconv.Atoi(maxErrorRateStr)
@@ -138,7 +139,7 @@ func (parser *ClientPolicyParser) MaxErrorRate() {
 }
 
 func (parser *ClientPolicyParser) ErrorRateWindow() {
-	errorRateWindowStr := strings.TrimSpace(parser.connURL.Query().Get("error_rate_window"))
+	errorRateWindowStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("error_rate_window"))
 
 	if errorRateWindowStr != "" {
 		errorRateWindow, _ := strconv.Atoi(errorRateWindowStr)
@@ -147,7 +148,7 @@ func (parser *ClientPolicyParser) ErrorRateWindow() {
 }
 
 func (parser *ClientPolicyParser) LimitConnectionsToQueueSize() {
-	limitConnsToQueueSizeStr := strings.TrimSpace(parser.connURL.Query().Get("limit_connections_to_queue_size"))
+	limitConnsToQueueSizeStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("limit_connections_to_queue_size"))
 
 	if limitConnsToQueueSizeStr != "" {
 		limitConnsToQueueSize, _ := strconv.ParseBool(limitConnsToQueueSizeStr)
@@ -156,7 +157,7 @@ func (parser *ClientPolicyParser) LimitConnectionsToQueueSize() {
 }
 
 func (parser *ClientPolicyParser) OpeningConnectionThreshold() {
-	openingConnThresholdStr := strings.TrimSpace(parser.connURL.Query().Get("opening_connection_threshold"))
+	openingConnThresholdStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("opening_connection_threshold"))
 
 	if openingConnThresholdStr != "" {
 		openingConnThreshold, _ := strconv.Atoi(openingConnThresholdStr)
@@ -165,7 +166,7 @@ func (parser *ClientPolicyParser) OpeningConnectionThreshold() {
 }
 
 func (parser *ClientPolicyParser) FailIfNotConnected() {
-	failIfNotConnectedStr := strings.TrimSpace(parser.connURL.Query().Get("fail_if_not_connected"))
+	failIfNotConnectedStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("fail_if_not_connected"))
 
 	if failIfNotConnectedStr != "" {
 		failIfNotConnected, _ := strconv.ParseBool(failIfNotConnectedStr)
@@ -174,7 +175,7 @@ func (parser *ClientPolicyParser) FailIfNotConnected() {
 }
 
 func (parser *ClientPolicyParser) TendInterval() {
-	tendIntervalStr := parser.connURL.Query().Get("tend_interval")
+	tendIntervalStr := parser.aeroURL.GetURL().Query().Get("tend_interval")
 
 	if tendIntervalStr != "" {
 		tendInterval, _ := time.ParseDuration(tendIntervalStr)
@@ -183,7 +184,7 @@ func (parser *ClientPolicyParser) TendInterval() {
 }
 
 func (parser *ClientPolicyParser) UseServicesAlternate() {
-	useServicesAlternateStr := strings.TrimSpace(parser.connURL.Query().Get("use_services_alternate"))
+	useServicesAlternateStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("use_services_alternate"))
 
 	if useServicesAlternateStr != "" {
 		useServicesAlternate, _ := strconv.ParseBool(useServicesAlternateStr)
@@ -192,7 +193,7 @@ func (parser *ClientPolicyParser) UseServicesAlternate() {
 }
 
 func (parser *ClientPolicyParser) RackAware() {
-	rackAwareStr := strings.TrimSpace(parser.connURL.Query().Get("rack_aware"))
+	rackAwareStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("rack_aware"))
 
 	if rackAwareStr != "" {
 		rackAware, _ := strconv.ParseBool(rackAwareStr)
@@ -201,7 +202,7 @@ func (parser *ClientPolicyParser) RackAware() {
 }
 
 func (parser *ClientPolicyParser) RackId() {
-	rackIdStr := strings.TrimSpace(parser.connURL.Query().Get("rack_id"))
+	rackIdStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("rack_id"))
 
 	if rackIdStr != "" {
 		rackId, _ := strconv.Atoi(rackIdStr)
@@ -210,7 +211,7 @@ func (parser *ClientPolicyParser) RackId() {
 }
 
 func (parser *ClientPolicyParser) IgnoreOtherSubnetAliases() {
-	ignoreOtherSubnetAliasesStr := strings.TrimSpace(parser.connURL.Query().Get("ignore_subnet_aliases"))
+	ignoreOtherSubnetAliasesStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("ignore_subnet_aliases"))
 
 	if ignoreOtherSubnetAliasesStr != "" {
 		ignoreOtherSubnetAliases, _ := strconv.ParseBool(ignoreOtherSubnetAliasesStr)
@@ -219,7 +220,7 @@ func (parser *ClientPolicyParser) IgnoreOtherSubnetAliases() {
 }
 
 func (parser *ClientPolicyParser) SeedOnlyCluster() {
-	seedOnlyClusterStr := strings.TrimSpace(parser.connURL.Query().Get("seed_only_cluster"))
+	seedOnlyClusterStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("seed_only_cluster"))
 
 	if seedOnlyClusterStr != "" {
 		seedOnlyCluster, _ := strconv.ParseBool(seedOnlyClusterStr)
