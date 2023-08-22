@@ -4,7 +4,7 @@
 # 👇 Usage
 
 ### 🔗 Connection string format
-`aerospike://user:password@localhost:6789?auth_mode=auth_mode_internal&cluster_name=aerocluster-001&timeout=30`
+`aerospike://aerouser001:aerouserpassw123@127.0.0.1:3000?auth_mode=auth_mode_internal&timeout=10s&idle_timeout=3s&max_error_rate=50`
 
 ### ⚙️ Parse connection string into Aerospike client factory
 
@@ -17,20 +17,26 @@ import (
 )
 
 // Use aerospikeurl to build Aerospike client from URL
-func getClientFromURL(url string) {
+func buildClientFromURL(url string) {
     clientFactory, err := aerospikeurl.Parse(url)
     if err != nil {
         panic(err)
     }
 
-    return clientFactory.GetClient()
+    client, err := clientFactory.BuildClient()
+    if err != nil {
+        panic(err)
+    }
+
+    return client
 }
 
 // Use Aerospike client as usual
 func main() {
-    url := "aerospike://user:password@localhost:6789?auth_mode=auth_mode_internal&cluster_name=aerocluster-001&timeout=30"
+    url := "aerospike://aerouser001:aerouserpassw123@127.0.0.1:3000?auth_mode=auth_mode_internal&timeout=10s&idle_timeout=3s&max_error_rate=50"
 
-    client := getClientFromURL(url)
+    client := buildClientFromURL(url)
+	defer client.Close()
 
     key, err := aero.NewKey("test", "aerospike", "key")
     panicOnError(err)
