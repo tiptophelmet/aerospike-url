@@ -1,3 +1,7 @@
+// Clientpolicy package.
+// Aerospike client policy [aerospike.ClientPolicy] properties are parsed from [aerourl.AerospikeURL] here.
+// 
+// [aerospike.ClientPolicy]: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 package clientpolicy
 
 import (
@@ -10,6 +14,10 @@ import (
 	"github.com/tiptophelmet/aerospike-url/factory"
 )
 
+// Parses [aerospike.ClientPolicy] properties from validated [aerourl.AerospikeURL]
+// If URL query is not empty, properties will be parsed.
+// 
+// [aerospike.ClientPolicy]: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func Parse(aeroURL *aerourl.AerospikeURL, clientFactory *factory.AerospikeClientFactory) {
 	if len(aeroURL.GetURL().Query()) == 0 {
 		return
@@ -42,11 +50,17 @@ func Parse(aeroURL *aerourl.AerospikeURL, clientFactory *factory.AerospikeClient
 	clientFactory.SetClientPolicy(parser.GetClientPolicy())
 }
 
+// Serves as a holder for [aerourl.AerospikeURL] and [aerospike.ClientPolicy].
+// Has a collection of methods to identify and parse each client policy property from URL query.
+// 
+// [aerospike.ClientPolicy]: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 type ClientPolicyParser struct {
 	aeroURL *aerourl.AerospikeURL
 	policy  *aerospike.ClientPolicy
 }
 
+// Parses `aerospike.ClientPolicy.AuthMode`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) AuthMode() {
 	authMode := parser.aeroURL.GetURL().Query().Get("auth_mode")
 
@@ -59,6 +73,8 @@ func (parser *ClientPolicyParser) AuthMode() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.User`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) User() {
 	user := parser.aeroURL.GetURL().User.Username()
 	if user != "" {
@@ -66,6 +82,8 @@ func (parser *ClientPolicyParser) User() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.Password`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) Password() {
 	password, isPasswordSet := parser.aeroURL.GetURL().User.Password()
 	if isPasswordSet {
@@ -73,6 +91,8 @@ func (parser *ClientPolicyParser) Password() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.ClusterName`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) ClusterName() {
 	clusterName := parser.aeroURL.GetURL().Query().Get("cluster_name")
 	if clusterName != "" {
@@ -80,6 +100,8 @@ func (parser *ClientPolicyParser) ClusterName() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.Timeout`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) Timeout() {
 	timeoutStr := parser.aeroURL.GetURL().Query().Get("timeout")
 
@@ -89,6 +111,8 @@ func (parser *ClientPolicyParser) Timeout() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.IdleTimeout`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) IdleTimeout() {
 	idleTimeoutStr := parser.aeroURL.GetURL().Query().Get("idle_timeout")
 
@@ -98,6 +122,8 @@ func (parser *ClientPolicyParser) IdleTimeout() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.LoginTimeout`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) LoginTimeout() {
 	loginTimeoutStr := parser.aeroURL.GetURL().Query().Get("login_timeout")
 
@@ -107,6 +133,8 @@ func (parser *ClientPolicyParser) LoginTimeout() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.ConnectionQueueSize`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) ConnectionQueueSize() {
 	connQueueSizeStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("connection_queue_size"))
 
@@ -116,6 +144,8 @@ func (parser *ClientPolicyParser) ConnectionQueueSize() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.MinConnectionsPerNode`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) MinConnectionsPerNode() {
 	minConnsPerNodeStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("min_connections_per_node"))
 
@@ -125,6 +155,8 @@ func (parser *ClientPolicyParser) MinConnectionsPerNode() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.MaxErrorRate`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) MaxErrorRate() {
 	maxErrorRateStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("max_error_rate"))
 
@@ -134,6 +166,8 @@ func (parser *ClientPolicyParser) MaxErrorRate() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.ErrorRateWindow`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) ErrorRateWindow() {
 	errorRateWindowStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("error_rate_window"))
 
@@ -143,6 +177,8 @@ func (parser *ClientPolicyParser) ErrorRateWindow() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.LimitConnectionsToQueueSize`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) LimitConnectionsToQueueSize() {
 	limitConnsToQueueSizeStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("limit_connections_to_queue_size"))
 
@@ -152,6 +188,8 @@ func (parser *ClientPolicyParser) LimitConnectionsToQueueSize() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.OpeningConnectionThreshold`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) OpeningConnectionThreshold() {
 	openingConnThresholdStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("opening_connection_threshold"))
 
@@ -161,6 +199,8 @@ func (parser *ClientPolicyParser) OpeningConnectionThreshold() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.FailIfNotConnected`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) FailIfNotConnected() {
 	failIfNotConnectedStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("fail_if_not_connected"))
 
@@ -170,6 +210,8 @@ func (parser *ClientPolicyParser) FailIfNotConnected() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.TendInterval`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) TendInterval() {
 	tendIntervalStr := parser.aeroURL.GetURL().Query().Get("tend_interval")
 
@@ -179,6 +221,8 @@ func (parser *ClientPolicyParser) TendInterval() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.UseServicesAlternate`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) UseServicesAlternate() {
 	useServicesAlternateStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("use_services_alternate"))
 
@@ -188,6 +232,8 @@ func (parser *ClientPolicyParser) UseServicesAlternate() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.RackAware`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) RackAware() {
 	rackAwareStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("rack_aware"))
 
@@ -197,6 +243,8 @@ func (parser *ClientPolicyParser) RackAware() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.RackId`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) RackId() {
 	rackIdStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("rack_id"))
 
@@ -206,6 +254,8 @@ func (parser *ClientPolicyParser) RackId() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.IgnoreOtherSubnetAliases`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) IgnoreOtherSubnetAliases() {
 	ignoreOtherSubnetAliasesStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("ignore_subnet_aliases"))
 
@@ -215,6 +265,8 @@ func (parser *ClientPolicyParser) IgnoreOtherSubnetAliases() {
 	}
 }
 
+// Parses `aerospike.ClientPolicy.SeedOnlyCluster`.
+// See: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) SeedOnlyCluster() {
 	seedOnlyClusterStr := strings.TrimSpace(parser.aeroURL.GetURL().Query().Get("seed_only_cluster"))
 
@@ -224,6 +276,8 @@ func (parser *ClientPolicyParser) SeedOnlyCluster() {
 	}
 }
 
+// Returns [aerospike.ClientPolicy].
+// [aerospike.ClientPolicy] https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func (parser *ClientPolicyParser) GetClientPolicy() *aerospike.ClientPolicy {
 	return parser.policy
 }

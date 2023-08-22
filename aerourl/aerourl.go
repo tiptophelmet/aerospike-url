@@ -1,3 +1,5 @@
+// Aerospike URL package.
+// Aerospike connection string is validated & processed into [aerourl.AerospikeURL] here.
 package aerourl
 
 import (
@@ -5,6 +7,8 @@ import (
 	"strings"
 )
 
+// Processes connection string, initializes, validates & returns [aerourl.AerospikeURL].
+// Returns error, if connection string is empty or failed validation.
 func Init(connStr string) (*AerospikeURL, error) {
 	if strings.TrimSpace(connStr) == "" {
 		return nil, ErrEmptyConnStr
@@ -25,6 +29,10 @@ func Init(connStr string) (*AerospikeURL, error) {
 	return aeroURL, nil
 }
 
+// Serves as a validated [net/url.URL] that possesses min required data for creating Aerospike DB client.
+// It is strictly instantiated using [aerourl.Init] to get a properly validated Aerospike URL.
+// 
+// Instantiating this struct directly will result in failure to get min required data for DB client.
 type AerospikeURL struct {
 	url *url.URL
 }
@@ -49,6 +57,14 @@ func (aeroURL *AerospikeURL) validateSchemeAndHost() error {
 	return nil
 }
 
+// Retrieves underlying [net/url.URL].
+// Empty [net/url.URL] is returned, if it was not initialized & validated at [aerourl.Init].
+//
+// Empty or non-validated url will result in failure to get min required data for DB client.
 func (aeroURL *AerospikeURL) GetURL() *url.URL {
+	if aeroURL.url == nil {
+		aeroURL.url = &url.URL{}
+	}
+
 	return aeroURL.url
 }
