@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/aerospike/aerospike-client-go/v6"
 )
@@ -76,13 +77,16 @@ func TestBuildClient(t *testing.T) {
 	factory.SetPort(aerospikePort)
 
 	client, err := factory.BuildClient()
-
 	if err != nil {
 		t.Fatalf("got: %v, want error = nil", err)
 	}
 
 	if client == nil {
 		t.Fatalf("got: %v, want *aerospike.Client != nil", client)
+	}
+
+	if !client.IsConnected() {
+		t.Fatal("got: client.IsConnected() = false, want: client.IsConnected() = true")
 	}
 
 	client.Close()
@@ -95,24 +99,31 @@ func TestBuildClientWithPolicy(t *testing.T) {
 
 	factory := &AerospikeClientFactory{}
 
-	factory.SetHostname("127.0.0.1")
-	factory.SetPort(3000)
+	factory.SetHostname(aerospikeHostname)
+	factory.SetPort(aerospikePort)
 
 	policy := aerospike.NewClientPolicy()
-	policy.AuthMode = aerospike.AuthModeInternal
-	policy.User = "aero-user-001"
-	policy.Password = "aerouser001passw"
+
+	timeout, _ :=  time.ParseDuration("10s")
+	idleTimeout, _ :=  time.ParseDuration("3s")
+
+	policy.Timeout = timeout
+	policy.IdleTimeout = idleTimeout
+	policy.MaxErrorRate = 50
 
 	factory.SetClientPolicy(policy)
 
 	client, err := factory.BuildClient()
-
 	if err != nil {
 		t.Fatalf("got: %v, want error = nil", err)
 	}
 
 	if client == nil {
 		t.Fatalf("got: %v, want *aerospike.Client != nil", client)
+	}
+
+	if !client.IsConnected() {
+		t.Fatal("got: client.IsConnected() = false, want: client.IsConnected() = true")
 	}
 
 	client.Close()
