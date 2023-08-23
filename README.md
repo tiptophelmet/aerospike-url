@@ -12,55 +12,67 @@
 package main
 
 import (
-    "github.com/tiptophelmet/aerospike-url"
-    aero "github.com/aerospike/aerospike-client-go/v6"
+	"fmt"
+
+	aerospikeurl "github.com/tiptophelmet/aerospike-url"
+	aero "github.com/aerospike/aerospike-client-go/v6"
 )
 
 // Use aerospikeurl to build Aerospike client from URL
-func buildClientFromURL(url string) {
-    clientFactory, err := aerospikeurl.Parse(url)
-    if err != nil {
-        panic(err)
-    }
+func buildClientFromURL(url string) *aero.Client {
+	clientFactory, err := aerospikeurl.Parse(url)
+	if err != nil {
+		panic(err)
+	}
 
-    client, err := clientFactory.BuildClient()
-    if err != nil {
-        panic(err)
-    }
+	client, err := clientFactory.BuildClient()
+	if err != nil {
+		panic(err)
+	}
 
-    return client
+	return client
+}
+
+// This is only for this example.
+// Please handle errors properly.
+func panicOnError(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
 
 // Use Aerospike client as usual
 func main() {
-    url := "aerospike://aerouser001:aerouserpassw123@127.0.0.1:3000?auth_mode=auth_mode_internal&timeout=10s&idle_timeout=3s&max_error_rate=50"
+	url := "aerospike://aerouser001:aerouserpassw123@127.0.0.1:3000?auth_mode=auth_mode_internal&timeout=10s&idle_timeout=3s&max_error_rate=50"
 
-    client := buildClientFromURL(url)
+	client := buildClientFromURL(url)
 	defer client.Close()
 
-    key, err := aero.NewKey("test", "aerospike", "key")
-    panicOnError(err)
+	key, err := aero.NewKey("test", "aerospike", "key")
+	panicOnError(err)
 
-    // define some bins with data
-    bins := aero.BinMap{
-        "bin1": 42,
-        "bin2": "An elephant is a mouse with an operating system",
-        "bin3": []interface{}{"Go", 2009},
-    }
+	// define some bins with data
+	bins := aero.BinMap{
+		"bin1": 42,
+		"bin2": "An elephant is a mouse with an operating system",
+		"bin3": []interface{}{"Go", 2009},
+	}
 
-    // write the bins
-    err = client.Put(nil, key, bins)
-    panicOnError(err)
+	// write the bins
+	err = client.Put(nil, key, bins)
+	panicOnError(err)
 
-    // read it back!
-    rec, err := client.Get(nil, key)
-    panicOnError(err)
+	// read it back!
+	rec, err := client.Get(nil, key)
+	panicOnError(err)
 
-    // delete the key, and check if key exists
-    existed, err := client.Delete(nil, key)
-    panicOnError(err)
+	fmt.Printf("Record bins: %v", rec.Bins)
 
-    fmt.Printf("Record existed before delete? %v\n", existed)
+	// delete the key, and check if key exists
+	existed, err := client.Delete(nil, key)
+	panicOnError(err)
+
+	fmt.Printf("Record existed before delete? %v\n", existed)
 }
 ```
 
