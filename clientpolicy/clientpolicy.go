@@ -10,15 +10,15 @@ import (
 	"time"
 
 	"github.com/aerospike/aerospike-client-go/v6"
+	"github.com/tiptophelmet/aerospike-url/aerofactory"
 	"github.com/tiptophelmet/aerospike-url/aerourl"
-	"github.com/tiptophelmet/aerospike-url/factory"
 )
 
 // Parses [aerospike.ClientPolicy] properties from validated [aerourl.AerospikeURL]
 // If URL query is not empty, properties will be parsed.
 //
 // [aerospike.ClientPolicy]: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
-func Parse(aeroURL *aerourl.AerospikeURL, clientFactory *factory.AerospikeClientFactory) {
+func Parse(aeroURL *aerourl.AerospikeURL, clientFactory *aerofactory.AerospikeClientFactory) {
 	if len(aeroURL.GetNetURL().Query()) == 0 {
 		return
 	}

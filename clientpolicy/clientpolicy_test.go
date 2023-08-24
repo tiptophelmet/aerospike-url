@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/aerospike/aerospike-client-go/v6"
+	"github.com/tiptophelmet/aerospike-url/aerofactory"
 	"github.com/tiptophelmet/aerospike-url/aerourl"
-	"github.com/tiptophelmet/aerospike-url/factory"
 )
 
 func TestClientPolicyParser_AuthMode(t *testing.T) {
@@ -339,7 +339,7 @@ func TestParse(t *testing.T) {
 
 	aeroURL, _ := aerourl.Init(connStr)
 
-	clientFactory := &factory.AerospikeClientFactory{}
+	clientFactory := &aerofactory.AerospikeClientFactory{}
 	clientFactory.SetHostname("127.0.0.1")
 	clientFactory.SetPort(3000)
 

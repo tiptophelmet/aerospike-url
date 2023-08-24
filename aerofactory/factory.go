@@ -1,6 +1,6 @@
 // Factory package.
 // Aerospike DB hostname, port & client policy are assembled into DB client factory here.
-package factory
+package aerofactory
 
 import (
 	"github.com/aerospike/aerospike-client-go/v6"
