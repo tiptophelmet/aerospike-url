@@ -1,8 +1,7 @@
-package factory
+package aerofactory
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"testing"
 	"time"
@@ -47,6 +46,19 @@ func TestSetGetPort(t *testing.T) {
 	}
 }
 
+func TestSetGetNamespace(t *testing.T) {
+	factory := &AerospikeClientFactory{}
+
+	namespace := "aero-namespace-001"
+
+	factory.SetNamespace(namespace)
+	gotNamespace := factory.GetNamespace()
+
+	if gotNamespace != namespace {
+		t.Errorf("got: %v, want: %v", gotNamespace, namespace)
+	}
+}
+
 func TestSetGetClientPolicy(t *testing.T) {
 	factory := &AerospikeClientFactory{}
 
@@ -67,7 +79,6 @@ func TestSetGetClientPolicy(t *testing.T) {
 
 func TestBuildClient(t *testing.T) {
 	if aerospikeHostname == "" || aerospikePort == 0 {
-		fmt.Println(aerospikeHostname)
 		t.Skip("set aerospike hostname & port to run this test (go test -hostname='127.0.0.1' -port='3000')")
 	}
 
@@ -104,8 +115,8 @@ func TestBuildClientWithPolicy(t *testing.T) {
 
 	policy := aerospike.NewClientPolicy()
 
-	timeout, _ :=  time.ParseDuration("10s")
-	idleTimeout, _ :=  time.ParseDuration("3s")
+	timeout, _ := time.ParseDuration("10s")
+	idleTimeout, _ := time.ParseDuration("3s")
 
 	policy.Timeout = timeout
 	policy.IdleTimeout = idleTimeout

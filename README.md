@@ -4,7 +4,7 @@
 # 👇 Usage
 
 ### 🔗 Connection string format
-`aerospike://aerouser001:aerouserpassw123@127.0.0.1:3000?auth_mode=auth_mode_internal&timeout=10s&idle_timeout=3s&max_error_rate=50`
+`aerospike://aerouser001:aerouserpassw123@127.0.0.1:3000/my-aerospike-namespace?auth_mode=auth_mode_internal&timeout=10s&idle_timeout=3s&max_error_rate=50`
 
 ### ⚙️ Parse connection string into Aerospike client factory
 
@@ -43,7 +43,7 @@ func panicOnError(err error) {
 
 // Use Aerospike client as usual
 func main() {
-	url := "aerospike://aerouser001:aerouserpassw123@127.0.0.1:3000?auth_mode=auth_mode_internal&timeout=10s&idle_timeout=3s&max_error_rate=50"
+	url := "aerospike://aerouser001:aerouserpassw123@127.0.0.1:3000/my-aerospike-namespace?auth_mode=auth_mode_internal&timeout=10s&idle_timeout=3s&max_error_rate=50"
 
 	client := buildClientFromURL(url)
 	defer client.Close()
