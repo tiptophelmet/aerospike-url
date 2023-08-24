@@ -11,7 +11,7 @@ import (
 )
 
 func TestClientPolicyParser_AuthMode(t *testing.T) {
-	aeroURL, _ := aerourl.Init("aerospike://127.0.0.1:3000?auth_mode=auth_mode_pki")
+	aeroURL, _ := aerourl.Init("aerospike://127.0.0.1:3000/aero-namespace-001?auth_mode=auth_mode_pki")
 	policy := aerospike.NewClientPolicy()
 
 	parser := &ClientPolicyParser{aeroURL, policy}
@@ -24,7 +24,7 @@ func TestClientPolicyParser_AuthMode(t *testing.T) {
 
 func TestClientPolicyParser_User(t *testing.T) {
 	user := "aero-user-001"
-	connStr := fmt.Sprintf("aerospike://%v:aerouserpassw123@127.0.0.1:3000", user)
+	connStr := fmt.Sprintf("aerospike://%v:aerouserpassw123@127.0.0.1:3000/aero-namespace-001", user)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -39,7 +39,7 @@ func TestClientPolicyParser_User(t *testing.T) {
 
 func TestClientPolicyParser_Password(t *testing.T) {
 	password := "aerouserpassw123"
-	connStr := fmt.Sprintf("aerospike://aero-user-001:%v@127.0.0.1:3000", password)
+	connStr := fmt.Sprintf("aerospike://aero-user-001:%v@127.0.0.1:3000/aero-namespace-001", password)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -54,7 +54,7 @@ func TestClientPolicyParser_Password(t *testing.T) {
 
 func TestClientPolicyParser_ClusterName(t *testing.T) {
 	clusterName := "aero-cluster-001"
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?cluster_name=%v", clusterName)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?cluster_name=%v", clusterName)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -69,7 +69,7 @@ func TestClientPolicyParser_ClusterName(t *testing.T) {
 
 func TestClientPolicyParser_Timeout(t *testing.T) {
 	timeoutStr := "60s"
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?timeout=%v", timeoutStr)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?timeout=%v", timeoutStr)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -85,7 +85,7 @@ func TestClientPolicyParser_Timeout(t *testing.T) {
 
 func TestClientPolicyParser_IdleTimeout(t *testing.T) {
 	idleTimeoutStr := "15s"
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?idle_timeout=%v", idleTimeoutStr)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?idle_timeout=%v", idleTimeoutStr)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -101,7 +101,7 @@ func TestClientPolicyParser_IdleTimeout(t *testing.T) {
 
 func TestClientPolicyParser_LoginTimeout(t *testing.T) {
 	loginTimeoutStr := "10s"
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?login_timeout=%v", loginTimeoutStr)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?login_timeout=%v", loginTimeoutStr)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -117,7 +117,7 @@ func TestClientPolicyParser_LoginTimeout(t *testing.T) {
 
 func TestClientPolicyParser_ConnectionQueueSize(t *testing.T) {
 	connQueueSize := 100
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?connection_queue_size=%d", connQueueSize)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?connection_queue_size=%d", connQueueSize)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -132,7 +132,7 @@ func TestClientPolicyParser_ConnectionQueueSize(t *testing.T) {
 
 func TestClientPolicyParser_MinConnectionsPerNode(t *testing.T) {
 	minConnsPerNode := 5
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?min_connections_per_node=%d", minConnsPerNode)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?min_connections_per_node=%d", minConnsPerNode)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -147,7 +147,7 @@ func TestClientPolicyParser_MinConnectionsPerNode(t *testing.T) {
 
 func TestClientPolicyParser_MaxErrorRate(t *testing.T) {
 	maxErrorRate := 10
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?max_error_rate=%d", maxErrorRate)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?max_error_rate=%d", maxErrorRate)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -162,7 +162,7 @@ func TestClientPolicyParser_MaxErrorRate(t *testing.T) {
 
 func TestClientPolicyParser_ErrorRateWindow(t *testing.T) {
 	errorRateWindow := 100
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?error_rate_window=%d", errorRateWindow)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?error_rate_window=%d", errorRateWindow)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -177,7 +177,7 @@ func TestClientPolicyParser_ErrorRateWindow(t *testing.T) {
 
 func TestClientPolicyParser_LimitConnectionsToQueueSize(t *testing.T) {
 	limitConnsToQueueSize := true
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?limit_connections_to_queue_size=%v", limitConnsToQueueSize)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?limit_connections_to_queue_size=%v", limitConnsToQueueSize)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -192,7 +192,7 @@ func TestClientPolicyParser_LimitConnectionsToQueueSize(t *testing.T) {
 
 func TestClientPolicyParser_OpeningConnectionThreshold(t *testing.T) {
 	openingConnThreshold := 50
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?opening_connection_threshold=%d", openingConnThreshold)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?opening_connection_threshold=%d", openingConnThreshold)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -207,7 +207,7 @@ func TestClientPolicyParser_OpeningConnectionThreshold(t *testing.T) {
 
 func TestClientPolicyParser_FailIfNotConnected(t *testing.T) {
 	failIfNotConnected := true
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?fail_if_not_connected=%v", failIfNotConnected)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?fail_if_not_connected=%v", failIfNotConnected)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -222,7 +222,7 @@ func TestClientPolicyParser_FailIfNotConnected(t *testing.T) {
 
 func TestClientPolicyParser_TendInterval(t *testing.T) {
 	tendIntervalStr := "5s"
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?tend_interval=%v", tendIntervalStr)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?tend_interval=%v", tendIntervalStr)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -238,7 +238,7 @@ func TestClientPolicyParser_TendInterval(t *testing.T) {
 
 func TestClientPolicyParser_UseServicesAlternate(t *testing.T) {
 	useServicesAlternate := true
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?use_services_alternate=%v", useServicesAlternate)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?use_services_alternate=%v", useServicesAlternate)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -253,7 +253,7 @@ func TestClientPolicyParser_UseServicesAlternate(t *testing.T) {
 
 func TestClientPolicyParser_RackAware(t *testing.T) {
 	rackAware := true
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?rack_aware=%v", rackAware)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?rack_aware=%v", rackAware)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -268,7 +268,7 @@ func TestClientPolicyParser_RackAware(t *testing.T) {
 
 func TestClientPolicyParser_RackId(t *testing.T) {
 	rackId := 2
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?rack_id=%d", rackId)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?rack_id=%d", rackId)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -283,7 +283,7 @@ func TestClientPolicyParser_RackId(t *testing.T) {
 
 func TestClientPolicyParser_IgnoreOtherSubnetAliases(t *testing.T) {
 	ignoreOtherSubnetAliases := true
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?ignore_subnet_aliases=%v", ignoreOtherSubnetAliases)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?ignore_subnet_aliases=%v", ignoreOtherSubnetAliases)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -298,7 +298,7 @@ func TestClientPolicyParser_IgnoreOtherSubnetAliases(t *testing.T) {
 
 func TestClientPolicyParser_SeedOnlyCluster(t *testing.T) {
 	seedOnlyCluster := true
-	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000?seed_only_cluster=%v", seedOnlyCluster)
+	connStr := fmt.Sprintf("aerospike://127.0.0.1:3000/aero-namespace-001?seed_only_cluster=%v", seedOnlyCluster)
 
 	aeroURL, _ := aerourl.Init(connStr)
 	policy := aerospike.NewClientPolicy()
@@ -312,7 +312,7 @@ func TestClientPolicyParser_SeedOnlyCluster(t *testing.T) {
 }
 
 func TestClientPolicyParser_GetClientPolicy(t *testing.T) {
-	aeroURL, _ := aerourl.Init("aerospike://127.0.0.1:3000?auth_mode=auth_mode_pki")
+	aeroURL, _ := aerourl.Init("aerospike://127.0.0.1:3000/aero-namespace-001?auth_mode=auth_mode_pki")
 	policy := aerospike.NewClientPolicy()
 
 	parser := &ClientPolicyParser{aeroURL, policy}
@@ -334,7 +334,7 @@ func TestParse(t *testing.T) {
 		minConnectionsPerNode = "3"
 	)
 
-	connStr := fmt.Sprintf("aerospike://%s:%s@127.0.0.1:3000?auth_mode=%s&timeout=%s&cluster_name=%s&min_connections_per_node=%s",
+	connStr := fmt.Sprintf("aerospike://%s:%s@127.0.0.1:3000/aero-namespace-001?auth_mode=%s&timeout=%s&cluster_name=%s&min_connections_per_node=%s",
 		user, password, authMode, timeout, clusterName, minConnectionsPerNode)
 
 	aeroURL, _ := aerourl.Init(connStr)
@@ -345,28 +345,28 @@ func TestParse(t *testing.T) {
 
 	Parse(aeroURL, clientFactory)
 
-	if aeroURL.GetURL().Query().Get("auth_mode") != authMode {
-		t.Fatalf("got: %s, want: %s", aeroURL.GetURL().Query().Get("auth_mode"), authMode)
+	if aeroURL.GetNetURL().Query().Get("auth_mode") != authMode {
+		t.Fatalf("got: %s, want: %s", aeroURL.GetNetURL().Query().Get("auth_mode"), authMode)
 	}
 
-	if aeroURL.GetURL().User.Username() != user {
-		t.Fatalf("got: %s, want: %s", aeroURL.GetURL().User.Username(), user)
+	if aeroURL.GetNetURL().User.Username() != user {
+		t.Fatalf("got: %s, want: %s", aeroURL.GetNetURL().User.Username(), user)
 	}
 
-	pass, _ := aeroURL.GetURL().User.Password()
+	pass, _ := aeroURL.GetNetURL().User.Password()
 	if pass != password {
 		t.Fatalf("got: %s, want: %s", pass, password)
 	}
 
-	if aeroURL.GetURL().Query().Get("timeout") != timeout {
-		t.Fatalf("got: %s, want: %s", aeroURL.GetURL().Query().Get("timeout"), timeout)
+	if aeroURL.GetNetURL().Query().Get("timeout") != timeout {
+		t.Fatalf("got: %s, want: %s", aeroURL.GetNetURL().Query().Get("timeout"), timeout)
 	}
 
-	if aeroURL.GetURL().Query().Get("cluster_name") != clusterName {
-		t.Fatalf("got: %s, want: %s", aeroURL.GetURL().Query().Get("cluster_name"), clusterName)
+	if aeroURL.GetNetURL().Query().Get("cluster_name") != clusterName {
+		t.Fatalf("got: %s, want: %s", aeroURL.GetNetURL().Query().Get("cluster_name"), clusterName)
 	}
 
-	if aeroURL.GetURL().Query().Get("min_connections_per_node") != minConnectionsPerNode {
-		t.Fatalf("got: %s, want: %s", aeroURL.GetURL().Query().Get("min_connections_per_node"), minConnectionsPerNode)
+	if aeroURL.GetNetURL().Query().Get("min_connections_per_node") != minConnectionsPerNode {
+		t.Fatalf("got: %s, want: %s", aeroURL.GetNetURL().Query().Get("min_connections_per_node"), minConnectionsPerNode)
 	}
 }

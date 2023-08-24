@@ -47,6 +47,19 @@ func TestSetGetPort(t *testing.T) {
 	}
 }
 
+func TestSetGetNamespace(t *testing.T) {
+	factory := &AerospikeClientFactory{}
+
+	namespace := "aero-namespace-001"
+
+	factory.SetNamespace(namespace)
+	gotNamespace := factory.GetNamespace()
+
+	if gotNamespace != namespace {
+		t.Errorf("got: %v, want: %v", gotNamespace, namespace)
+	}
+}
+
 func TestSetGetClientPolicy(t *testing.T) {
 	factory := &AerospikeClientFactory{}
 
