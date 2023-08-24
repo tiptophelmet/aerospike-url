@@ -2,7 +2,6 @@ package factory
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"testing"
 	"time"
@@ -80,7 +79,6 @@ func TestSetGetClientPolicy(t *testing.T) {
 
 func TestBuildClient(t *testing.T) {
 	if aerospikeHostname == "" || aerospikePort == 0 {
-		fmt.Println(aerospikeHostname)
 		t.Skip("set aerospike hostname & port to run this test (go test -hostname='127.0.0.1' -port='3000')")
 	}
 
@@ -117,8 +115,8 @@ func TestBuildClientWithPolicy(t *testing.T) {
 
 	policy := aerospike.NewClientPolicy()
 
-	timeout, _ :=  time.ParseDuration("10s")
-	idleTimeout, _ :=  time.ParseDuration("3s")
+	timeout, _ := time.ParseDuration("10s")
+	idleTimeout, _ := time.ParseDuration("3s")
 
 	policy.Timeout = timeout
 	policy.IdleTimeout = idleTimeout
