@@ -1,6 +1,7 @@
 # aerospike-url 
 [![GitHub version](https://badge.fury.io/gh/tiptophelmet%2Faerospike-url.svg)](https://badge.fury.io/gh/tiptophelmet%2Faerospike-url)
 [![Go project version](https://badge.fury.io/go/github.com%2Ftiptophelmet%2Faerospike-url.svg)](https://badge.fury.io/go/github.com%2Ftiptophelmet%2Faerospike-url)
+[![codecov](https://codecov.io/gh/tiptophelmet/aerospike-url/graph/badge.svg?token=PDE9SG7H4Y)](https://codecov.io/gh/tiptophelmet/aerospike-url)
 
 💫 Parses URL connection string into Aerospike client.
 
