@@ -18,7 +18,7 @@ func TestClientPolicyParser_AuthMode(t *testing.T) {
 	parser.AuthMode()
 
 	if parser.policy.AuthMode != aerospike.AuthModePKI {
-		t.Fatalf("got: %v, want: parser.policy.AuthMode = 3 (aerospike.AuthModePKI)", parser.policy.AuthMode)
+		t.Fatalf("got: %v, want: parser.policy.AuthMode = 2 (aerospike.AuthModePKI)", parser.policy.AuthMode)
 	}
 }
 
@@ -346,7 +346,7 @@ func TestParse(t *testing.T) {
 	Parse(aeroURL, clientFactory)
 
 	if clientFactory.GetClientPolicy().AuthMode != aerospike.AuthModePKI {
-		t.Fatalf("got: %d, want: %d", clientFactory.GetClientPolicy().AuthMode, aerospike.AuthModePKI)
+		t.Fatalf("got: %d, want: clientFactory.GetClientPolicy().AuthMode = 2 (aerospike.AuthModePKI)", clientFactory.GetClientPolicy().AuthMode)
 	}
 
 	if clientFactory.GetClientPolicy().User != user {
