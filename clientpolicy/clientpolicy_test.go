@@ -331,10 +331,10 @@ func TestParse(t *testing.T) {
 		authMode              = "auth_mode_pki"
 		timeout               = "5s"
 		clusterName           = "myCluster"
-		minConnectionsPerNode = "3"
+		minConnectionsPerNode = 3
 	)
 
-	connStr := fmt.Sprintf("aerospike://%s:%s@127.0.0.1:3000/aero-namespace-001?auth_mode=%s&timeout=%s&cluster_name=%s&min_connections_per_node=%s",
+	connStr := fmt.Sprintf("aerospike://%s:%s@127.0.0.1:3000/aero-namespace-001?auth_mode=%s&timeout=%s&cluster_name=%s&min_connections_per_node=%d",
 		user, password, authMode, timeout, clusterName, minConnectionsPerNode)
 
 	aeroURL, _ := aerourl.Init(connStr)
@@ -345,28 +345,27 @@ func TestParse(t *testing.T) {
 
 	Parse(aeroURL, clientFactory)
 
-	if aeroURL.GetNetURL().Query().Get("auth_mode") != authMode {
-		t.Fatalf("got: %s, want: %s", aeroURL.GetNetURL().Query().Get("auth_mode"), authMode)
+	if clientFactory.GetClientPolicy().AuthMode != aerospike.AuthModePKI {
+		t.Fatalf("got: %d, want: %d", clientFactory.GetClientPolicy().AuthMode, aerospike.AuthModePKI)
 	}
 
-	if aeroURL.GetNetURL().User.Username() != user {
-		t.Fatalf("got: %s, want: %s", aeroURL.GetNetURL().User.Username(), user)
+	if clientFactory.GetClientPolicy().User != user {
+		t.Fatalf("got: %s, want: %s", clientFactory.GetClientPolicy().User, user)
 	}
 
-	pass, _ := aeroURL.GetNetURL().User.Password()
-	if pass != password {
-		t.Fatalf("got: %s, want: %s", pass, password)
+	if clientFactory.GetClientPolicy().Password != password {
+		t.Fatalf("got: %s, want: %s", clientFactory.GetClientPolicy().Password, password)
 	}
 
-	if aeroURL.GetNetURL().Query().Get("timeout") != timeout {
-		t.Fatalf("got: %s, want: %s", aeroURL.GetNetURL().Query().Get("timeout"), timeout)
+	if clientFactory.GetClientPolicy().Timeout.String() != timeout {
+		t.Fatalf("got: %s, want: %s", clientFactory.GetClientPolicy().Timeout.String(), timeout)
 	}
 
-	if aeroURL.GetNetURL().Query().Get("cluster_name") != clusterName {
-		t.Fatalf("got: %s, want: %s", aeroURL.GetNetURL().Query().Get("cluster_name"), clusterName)
+	if clientFactory.GetClientPolicy().ClusterName != clusterName {
+		t.Fatalf("got: %s, want: %s", clientFactory.GetClientPolicy().ClusterName, clusterName)
 	}
 
-	if aeroURL.GetNetURL().Query().Get("min_connections_per_node") != minConnectionsPerNode {
-		t.Fatalf("got: %s, want: %s", aeroURL.GetNetURL().Query().Get("min_connections_per_node"), minConnectionsPerNode)
+	if clientFactory.GetClientPolicy().MinConnectionsPerNode != minConnectionsPerNode {
+		t.Fatalf("got: %d, want: %d", clientFactory.GetClientPolicy().MinConnectionsPerNode, minConnectionsPerNode)
 	}
 }
