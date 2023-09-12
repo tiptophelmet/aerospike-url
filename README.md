@@ -1,5 +1,5 @@
 # aerospike-url 
-[![GitHub version](https://badge.fury.io/gh/tiptophelmet%2Faerospike-url.svg)](https://github.com/tiptophelmet/aerospike-url/releases/tag/v1.1.0)
+[![GitHub version](https://badge.fury.io/gh/tiptophelmet%2Faerospike-url.svg)](https://github.com/tiptophelmet/aerospike-url/releases/tag/v1.1.1)
 [![Go project version](https://badge.fury.io/go/github.com%2Ftiptophelmet%2Faerospike-url.svg)](https://pkg.go.dev/github.com/tiptophelmet/aerospike-url)
 [![codecov](https://codecov.io/gh/tiptophelmet/aerospike-url/graph/badge.svg?token=PDE9SG7H4Y)](https://codecov.io/gh/tiptophelmet/aerospike-url)
 
