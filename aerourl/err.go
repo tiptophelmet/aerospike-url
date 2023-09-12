@@ -17,9 +17,6 @@ var (
 	// Aerospike URL validation failed due to empty Aerospike DB port
 	ErrEmptyPort = errors.New("aerospike port cannot be empty")
 
-	// Aerospike URL validation failed due to invalid Aerospike DB port
-	ErrInvalidPort = errors.New("aerospike port must be within 0 to 65536")
-
 	// Aerospike URL validation failed due to empty Aerospike namespace
 	ErrEmptyNamespace = errors.New("aerospike namespace cannot be empty")
 

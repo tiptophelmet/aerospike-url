@@ -82,10 +82,7 @@ func (aeroURL *AerospikeURL) resolvePort() error {
 		return ErrEmptyPort
 	}
 
-	port, err := strconv.Atoi(aeroURL.url.Port())
-	if err != nil {
-		return ErrInvalidPort
-	}
+	port, _ := strconv.Atoi(aeroURL.url.Port())
 
 	aeroURL.port = port
 	return nil
