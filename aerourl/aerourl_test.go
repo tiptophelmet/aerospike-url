@@ -160,6 +160,15 @@ func TestInit(t *testing.T) {
 	}
 }
 
+func TestIllegalGetURL(t *testing.T) {
+	aeroURL := &AerospikeURL{}
+	connURL := aeroURL.GetNetURL()
+
+	if connURL.String() == " " {
+		t.Fatalf("got: %v, want: empty url.URL", connURL.String())
+	}
+}
+
 func TestGetURL(t *testing.T) {
 	var (
 		hostname  string = "127.0.0.1"
