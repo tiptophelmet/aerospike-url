@@ -141,9 +141,16 @@ func TestInitNamespaceFromCompatiblePath(t *testing.T) {
 }
 
 func TestInit(t *testing.T) {
-	connStr := "aerospike://127.0.0.1:3000/aero-namespace-001"
-	aeroURL, err := Init(connStr)
+	var (
+		hostname  string = "127.0.0.1"
+		port      int    = 3000
+		namespace string = "aero-namespace-001"
+	)
 
+	pattern := "aerospike://%s:%d/%s"
+	connStr := fmt.Sprintf(pattern, hostname, port, namespace)
+
+	aeroURL, err := Init(connStr)
 	if err != nil {
 		t.Fatalf(`got: %v, want: error = nil`, err)
 	}
@@ -154,15 +161,34 @@ func TestInit(t *testing.T) {
 }
 
 func TestGetURL(t *testing.T) {
-	connStr := "aerospike://127.0.0.1:3000/aero-namespace-001"
-	aeroURL, err := Init(connStr)
+	var (
+		hostname  string = "127.0.0.1"
+		port      int    = 3000
+		namespace string = "aero-namespace-001"
+	)
 
+	pattern := "aerospike://%s:%d/%s"
+	connStr := fmt.Sprintf(pattern, hostname, port, namespace)
+
+	aeroURL, err := Init(connStr)
 	if err != nil {
 		t.Fatalf(`got: %v, want: error = nil`, err)
 	}
 
 	if aeroURL == nil {
 		t.Fatalf(`got: %v, want: *AerospikeURL != nil`, aeroURL)
+	}
+
+	if aeroURL.Hostname() != hostname {
+		t.Fatalf(`got: %v, want: %v`, aeroURL.Hostname(), hostname)
+	}
+
+	if aeroURL.Port() != port {
+		t.Fatalf(`got: %v, want: %v`, aeroURL.Port(), port)
+	}
+
+	if aeroURL.Namespace() != namespace {
+		t.Fatalf(`got: %v, want: %v`, aeroURL.Namespace(), namespace)
 	}
 
 	connURL := aeroURL.GetNetURL()
