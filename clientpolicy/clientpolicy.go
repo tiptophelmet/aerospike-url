@@ -19,10 +19,6 @@ import (
 //
 // [aerospike.ClientPolicy]: https://pkg.go.dev/github.com/aerospike/aerospike-client-go/v6#ClientPolicy
 func Parse(aeroURL *aerourl.AerospikeURL, clientFactory *aerofactory.AerospikeClientFactory) {
-	if len(aeroURL.GetNetURL().Query()) == 0 {
-		return
-	}
-
 	policy := aerospike.NewClientPolicy()
 	parser := &ClientPolicyParser{aeroURL, policy}
 

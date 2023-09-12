@@ -113,8 +113,22 @@ func TestInitInvalidNamespace(t *testing.T) {
 	}
 }
 
-func TestInit(t *testing.T) {
-	connStr := "aerospike://127.0.0.1:3000/aero-namespace-001"
+func TestInitInvalidNamespaceFromCompatiblePath(t *testing.T) {
+	connStr := "aerospike://127.0.0.1:3000//random/compat/path"
+	aeroURL, err := Init(connStr)
+
+	if !errors.Is(err, ErrEmptyNamespace) {
+		fmt.Println(aeroURL.GetNetURL().RawFragment)
+		t.Fatalf(`got: %v, want: error is aerourl.ErrEmptyNamespace`, err)
+	}
+
+	if aeroURL != nil {
+		t.Fatalf(`got: %v, want: *AerospikeURL == nil`, aeroURL)
+	}
+}
+
+func TestInitNamespaceFromCompatiblePath(t *testing.T) {
+	connStr := "aerospike://127.0.0.1:3000/aero-namespace-001/random/compat/path"
 	aeroURL, err := Init(connStr)
 
 	if err != nil {
@@ -126,16 +140,64 @@ func TestInit(t *testing.T) {
 	}
 }
 
-func TestGetURL(t *testing.T) {
-	connStr := "aerospike://127.0.0.1:3000/aero-namespace-001"
-	aeroURL, err := Init(connStr)
+func TestInit(t *testing.T) {
+	var (
+		hostname  string = "127.0.0.1"
+		port      int    = 3000
+		namespace string = "aero-namespace-001"
+	)
 
+	pattern := "aerospike://%s:%d/%s"
+	connStr := fmt.Sprintf(pattern, hostname, port, namespace)
+
+	aeroURL, err := Init(connStr)
 	if err != nil {
 		t.Fatalf(`got: %v, want: error = nil`, err)
 	}
 
 	if aeroURL == nil {
 		t.Fatalf(`got: %v, want: *AerospikeURL != nil`, aeroURL)
+	}
+}
+
+func TestIllegalGetURL(t *testing.T) {
+	aeroURL := &AerospikeURL{}
+	connURL := aeroURL.GetNetURL()
+
+	if connURL.String() == " " {
+		t.Fatalf("got: %v, want: empty url.URL", connURL.String())
+	}
+}
+
+func TestGetURL(t *testing.T) {
+	var (
+		hostname  string = "127.0.0.1"
+		port      int    = 3000
+		namespace string = "aero-namespace-001"
+	)
+
+	pattern := "aerospike://%s:%d/%s"
+	connStr := fmt.Sprintf(pattern, hostname, port, namespace)
+
+	aeroURL, err := Init(connStr)
+	if err != nil {
+		t.Fatalf(`got: %v, want: error = nil`, err)
+	}
+
+	if aeroURL == nil {
+		t.Fatalf(`got: %v, want: *AerospikeURL != nil`, aeroURL)
+	}
+
+	if aeroURL.Hostname() != hostname {
+		t.Fatalf(`got: %v, want: %v`, aeroURL.Hostname(), hostname)
+	}
+
+	if aeroURL.Port() != port {
+		t.Fatalf(`got: %v, want: %v`, aeroURL.Port(), port)
+	}
+
+	if aeroURL.Namespace() != namespace {
+		t.Fatalf(`got: %v, want: %v`, aeroURL.Namespace(), namespace)
 	}
 
 	connURL := aeroURL.GetNetURL()

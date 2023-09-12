@@ -10,7 +10,31 @@ import (
 	"github.com/tiptophelmet/aerospike-url/aerourl"
 )
 
-func TestClientPolicyParser_AuthMode(t *testing.T) {
+func TestClientPolicyParser_AuthModeInternal(t *testing.T) {
+	aeroURL, _ := aerourl.Init("aerospike://127.0.0.1:3000/aero-namespace-001?auth_mode=auth_mode_internal")
+	policy := aerospike.NewClientPolicy()
+
+	parser := &ClientPolicyParser{aeroURL, policy}
+	parser.AuthMode()
+
+	if parser.policy.AuthMode != aerospike.AuthModeInternal {
+		t.Fatalf("got: %v, want: parser.policy.AuthModeInternal = 0 (aerospike.AuthModeInternal)", parser.policy.AuthMode)
+	}
+}
+
+func TestClientPolicyParser_AuthModeExternal(t *testing.T) {
+	aeroURL, _ := aerourl.Init("aerospike://127.0.0.1:3000/aero-namespace-001?auth_mode=auth_mode_external")
+	policy := aerospike.NewClientPolicy()
+
+	parser := &ClientPolicyParser{aeroURL, policy}
+	parser.AuthMode()
+
+	if parser.policy.AuthMode != aerospike.AuthModeExternal {
+		t.Fatalf("got: %v, want: parser.policy.AuthMode = 1 (aerospike.AuthModeExternal)", parser.policy.AuthMode)
+	}
+}
+
+func TestClientPolicyParser_AuthModePKI(t *testing.T) {
 	aeroURL, _ := aerourl.Init("aerospike://127.0.0.1:3000/aero-namespace-001?auth_mode=auth_mode_pki")
 	policy := aerospike.NewClientPolicy()
 
@@ -18,7 +42,7 @@ func TestClientPolicyParser_AuthMode(t *testing.T) {
 	parser.AuthMode()
 
 	if parser.policy.AuthMode != aerospike.AuthModePKI {
-		t.Fatalf("got: %v, want: parser.policy.AuthMode = 3 (aerospike.AuthModePKI)", parser.policy.AuthMode)
+		t.Fatalf("got: %v, want: parser.policy.AuthMode = 2 (aerospike.AuthModePKI)", parser.policy.AuthMode)
 	}
 }
 
@@ -346,7 +370,7 @@ func TestParse(t *testing.T) {
 	Parse(aeroURL, clientFactory)
 
 	if clientFactory.GetClientPolicy().AuthMode != aerospike.AuthModePKI {
-		t.Fatalf("got: %d, want: %d", clientFactory.GetClientPolicy().AuthMode, aerospike.AuthModePKI)
+		t.Fatalf("got: %d, want: clientFactory.GetClientPolicy().AuthMode = 2 (aerospike.AuthModePKI)", clientFactory.GetClientPolicy().AuthMode)
 	}
 
 	if clientFactory.GetClientPolicy().User != user {
