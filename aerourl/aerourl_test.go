@@ -113,6 +113,19 @@ func TestInitInvalidNamespace(t *testing.T) {
 	}
 }
 
+func TestInitNamespaceFromCompatiblePath(t *testing.T) {
+	connStr := "aerospike://127.0.0.1:3000/aero-namespace-001/random/compat/path"
+	aeroURL, err := Init(connStr)
+
+	if err != nil {
+		t.Fatalf(`got: %v, want: error = nil`, err)
+	}
+
+	if aeroURL == nil {
+		t.Fatalf(`got: %v, want: *AerospikeURL != nil`, aeroURL)
+	}
+}
+
 func TestInit(t *testing.T) {
 	connStr := "aerospike://127.0.0.1:3000/aero-namespace-001"
 	aeroURL, err := Init(connStr)
