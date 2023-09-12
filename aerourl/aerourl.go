@@ -45,10 +45,6 @@ type AerospikeURL struct {
 // Resolves min required data required for creating Aerospike DB client.
 // If URL is missing a required part - error is returned, otherwise it is nil.
 func (aeroURL *AerospikeURL) resolve() error {
-	if aeroURL.url == nil {
-		return ErrNilURL
-	}
-
 	if aeroURL.url.Scheme != "aerospike" {
 		return ErrInvalidScheme
 	}
